@@ -1,0 +1,14 @@
+# Dependencias
+node_modules/
+__pycache__/
+.venv/
+*.pyc
+
+
+.env
+.env.local
+.vscode/settings.json
+.idea/
+dist/
+build/
+*.log
