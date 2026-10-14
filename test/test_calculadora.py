@@ -24,6 +24,7 @@ def test_dividir():
     assert dividir(7, 2) == 3.5
 
 
-def test_dividir_por_cero():
-    with pytest.raises(ZeroDivisionError):
+def test_dividir_por_zero():
+    with pytest.raises(ValueError):
         dividir(10, 0)
+        
