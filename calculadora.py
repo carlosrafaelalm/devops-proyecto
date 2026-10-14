@@ -1,21 +1,17 @@
-def sumar(a,b):
-return a + b
+def sumar(a, b):
+    return a + b
+
 
 def restar(a, b):
-return a - b
-
-cat > calculadora.py << 'EOF'
-def sumar(a,b):
-return a + b
-
-def restar(a, b):
-return a - b
+    return a - b
 
 
 def multiplicar(a, b):
-return a * b
+    return a * b
+
 
 def dividir(a, b):
-if b == 0:
-    raise ValueError("No se puede dividir entre cero")
-return a / b
+    if b == 0:
+        raise ValueError("No se puede dividir entre cero")
+    return a / b
+# Función de potencia (TODO)
