@@ -12,19 +12,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clonar repositorio
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Configurar Python 3.11
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Cache de dependencias pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
 
       - name: Instalar dependencias
         run: pip install -r requirements.txt
 
-      - name: Linting con flake8
-        run: flake8 . --max-line-length=100 --exclude=.git,__pycache__
+      - name: Linting
+        run: flake8 . --max-line-length=100
 
-      - name: Ejecutar tests unitarios
-        run: pytest test/ -v
+      - name: Tests con coverage
+        run: pytest test/ -v --tb=short --junitxml=test-results/results.xml
+
+      - name: Publicar resultados de tests
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ github.run_number }}
+          path: test-results/
+          retention-days: 30
