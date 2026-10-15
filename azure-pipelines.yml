@@ -27,5 +27,5 @@ stages:
           - script: flake8 . --max-line-length=100
             displayName: 'Linting con flake8'
 
-          - script: pytest tests/ -v
+          - script: pytest test/ -v
             displayName: 'Tests unitarios'
