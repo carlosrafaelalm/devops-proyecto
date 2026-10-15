@@ -1,0 +1,31 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  pythonVersion: '3.11'
+
+stages:
+  - stage: CI
+    displayName: 'Integración Continua'
+    jobs:
+      - job: LintAndTest
+        displayName: 'Lint y Tests'
+        steps:
+          - task: UsePythonVersion@0
+            displayName: 'Configurar Python $(pythonVersion)'
+            inputs:
+              versionSpec: '$(pythonVersion)'
+
+          - script: pip install -r requirements.txt
+            displayName: 'Instalar dependencias'
+
+          - script: flake8 . --max-line-length=100
+            displayName: 'Linting con flake8'
+
+          - script: pytest tests/ -v
+            displayName: 'Tests unitarios'
