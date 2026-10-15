@@ -15,6 +15,3 @@ def dividir(a, b):
         raise ValueError("No se puede dividir entre cero")
     return a / b
 # Función de potencia (TODO)
-
-def funcion_con_error(  x,y ):
-    return x+y
