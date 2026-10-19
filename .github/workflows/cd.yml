@@ -1,0 +1,46 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    branches: [main]
+    types: [completed]
+
+jobs:
+  deploy-staging:
+    name: Deploy → Staging
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Simular deploy en Staging
+        run: |
+          echo "========================================="
+          echo "  DEPLOY A STAGING"
+          echo "  Versión: ${{ github.sha }}"
+          echo "  Ambiente: ${{ vars.APP_ENV }}"
+          echo "  Réplicas: ${{ vars.REPLICA_COUNT }}"
+          echo "========================================="
+          echo "Deploy completado exitosamente en staging"
+
+  deploy-production:
+    name: Deploy → Production
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Simular deploy en Producción
+        run: |
+          echo "========================================="
+          echo "  DEPLOY A PRODUCCIÓN"
+          echo "  Versión: ${{ github.sha }}"
+          echo "  Ambiente: ${{ vars.APP_ENV }}"
+          echo "  Réplicas: ${{ vars.REPLICA_COUNT }}"
+          echo "========================================="
+          echo "Deploy completado exitosamente en producción"
