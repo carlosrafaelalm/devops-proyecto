@@ -16,15 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Simular deploy en Staging
+      - name: Verificar configuración del ambiente
         run: |
-          echo "========================================="
-          echo "  DEPLOY A STAGING"
-          echo "  Versión: ${{ github.sha }}"
-          echo "  Ambiente: ${{ vars.APP_ENV }}"
-          echo "  Réplicas: ${{ vars.REPLICA_COUNT }}"
-          echo "========================================="
-          echo "Deploy completado exitosamente en staging"
+          echo "Ambiente: ${{ vars.APP_ENV }}"
+          echo "DB configurada: ${{ secrets.DB_URL != '' && 'SI' || 'NO' }}"
+          # NUNCA hacer: echo ${{ secrets.DB_URL }}
+          # Los secrets nunca se imprimen en logs
+
 
   deploy-production:
     name: Deploy → Production
