@@ -25,5 +25,5 @@ def test_dividir():
 
 
 def test_dividir_por_zero():
-    with pytest.raises(ZeroDivisionError):
+    with pytest.raises(ValueError):
         dividir(10, 0)
