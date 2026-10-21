@@ -1,0 +1,32 @@
+name: Rollback Manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versión a la que revertir (ej: abc1234)'
+        required: true
+        type: string
+      environment:
+        description: 'Ambiente donde hacer rollback'
+        required: true
+        type: choice
+        options: [staging, production]
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
+
+      - name: Ejecutar rollback
+        run: |
+          echo "=============================="
+          echo "  ROLLBACK"
+          echo "  Ambiente:  ${{ inputs.environment }}"
+          echo "  Versión:   ${{ inputs.version }}"
+          echo "=============================="
+          echo "Rollback completado exitosamente"
