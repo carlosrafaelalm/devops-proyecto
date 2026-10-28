@@ -56,6 +56,6 @@ jobs:
       - name: Publicar imagen (solo en push a main)
         if: github.ref == 'refs/heads/main'
         run: |
-          docker tag devops-app:${{ github.sha }} rafadx/devops-app:${{ github.sha }}
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "tu_usuario_real" --password-stdin
-          docker push tu_usuario_real/devops-app:${{ github.sha }}
+          docker tag devops-app:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/devops-app:${{ github.sha }}
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-app:${{ github.sha }}
