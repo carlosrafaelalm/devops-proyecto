@@ -42,3 +42,20 @@ jobs:
           name: test-results-${{ github.run_number }}
           path: test-results/
           retention-days: 30
+      - name: Build imagen Docker
+        run: docker build -t devops-app:${{ github.sha }} .
+
+      - name: Escaneo de seguridad con Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: devops-app:${{ github.sha }}
+          format: table
+          exit-code: '1'
+          severity: 'CRITICAL'
+
+      - name: Publicar imagen (solo en push a main)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker tag devops-app:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/devops-app:${{ github.sha }}
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-app:${{ github.sha }}
