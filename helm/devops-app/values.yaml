@@ -1,0 +1,36 @@
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: "1.25-alpine"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: nginx
+  host: devops-app.local
+
+resources:
+  requests:
+    memory: "32Mi"
+    cpu: "50m"
+  limits:
+    memory: "64Mi"
+    cpu: "100m"
+
+serviceAccount:
+  create: true
+  name: "devops-app-sa"
+
+httpRoute:
+  enabled: false
+  parentRefs:
+    - name: gateway
+      sectionName: http
+
+autoscaling:
+  enabled: false  
