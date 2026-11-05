@@ -1,8 +1,8 @@
 replicaCount: 2
 
 image:
-  repository: nginx
-  tag: "1.25-alpine"
+  repository: rafadx/devops-app
+  tag: "latest" # o el tag/sha correspondiente
   pullPolicy: IfNotPresent
 
 service:
