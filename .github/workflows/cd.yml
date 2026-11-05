@@ -33,7 +33,7 @@ jobs:
 
       - name: Helm deploy en Staging
         run: |
-          helm upgrade --install devops-app helm/devops-app \
+          helm upgrade --install devops-app ${{ github.workspace }}/helm/devops-app \
             --namespace staging \
             --create-namespace \
             --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/devops-app \
