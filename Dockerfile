@@ -1,3 +1,4 @@
+
 FROM python:3.11-slim
 
 LABEL maintainer="devops-academia"
@@ -19,4 +20,5 @@ USER appuser
 
 EXPOSE 8000
 
-CMD ["python", "-m", "pytest", "test/", "-v"]
+# Mantener el contenedor activo
+CMD ["python", "-c", "import time; time.sleep(1000000)"]
