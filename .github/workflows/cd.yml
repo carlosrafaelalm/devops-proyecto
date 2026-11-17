@@ -2,7 +2,7 @@ name: CD Pipeline
 
 on:
   workflow_run:
-    workflows: ["CI Pipeline"]
+    workflows: ["CI Pipeline", "Terraform IaC"]
     branches: [main]
     types: [completed]
 
@@ -14,11 +14,24 @@ jobs:
     environment: staging
 
     steps:
-      - name: Checkout del repositorio
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
-           
+      - uses: actions/checkout@v4
+
+      - name: Simular deploy en Staging
+        run: |
+          echo "========================================="
+          echo "  DEPLOY A STAGING"
+          echo "  Versión: ${{ github.sha }}"
+          echo "  Ambiente: ${{ vars.APP_ENV }}"
+          echo "  Réplicas: ${{ vars.REPLICA_COUNT }}"
+          echo "========================================="
+          echo "Deploy completado exitosamente en staging"
+
+      - name: Verificar configuración del ambiente
+        run: |
+          echo "Ambiente: ${{ vars.APP_ENV }}"
+          echo "DB configurada: ${{ secrets.DB_URL != '' && 'SI' || 'NO' }}"
+          # NUNCA hacer: echo ${{ secrets.DB_URL }}
+          # Los secrets nunca se imprimen en logs
 
       - name: Login en Azure
         uses: azure/login@v1
@@ -28,8 +41,8 @@ jobs:
       - name: Conectar a AKS
         run: |
           az aks get-credentials \
-            --resource-group rg-devops-academia \
-            --name aks-devops
+            --resource-group rg-staging-devops \
+            --name aks-staging-devops
 
       - name: Helm deploy en Staging
         run: |
@@ -39,8 +52,6 @@ jobs:
             --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/devops-app \
             --set image.tag=${{ github.sha }} \
             --wait --timeout 5m
-
-
 
   deploy-production:
     name: Deploy → Production
@@ -60,3 +71,4 @@ jobs:
           echo "  Réplicas: ${{ vars.REPLICA_COUNT }}"
           echo "========================================="
           echo "Deploy completado exitosamente en producción"
+ 
