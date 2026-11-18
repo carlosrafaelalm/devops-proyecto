@@ -60,14 +60,6 @@ jobs:
         with:
           sarif_file: trivy-results.sarif
 
-      - name: Escaneo de seguridad con Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: devops-app:${{ github.sha }}
-          format: table
-          exit-code: '1'
-          severity: 'CRITICAL'
-
       - name: Publicar imagen (solo en push a main)
         if: github.ref == 'refs/heads/main'
         run: |
