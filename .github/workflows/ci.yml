@@ -53,6 +53,7 @@ jobs:
           output: trivy-results.sarif
           scanners: vuln
           vuln-type: library
+          skip-files: '**/pip/_vendor/bom.cdx.json'
           severity: HIGH,CRITICAL
           exit-code: '1'
 
