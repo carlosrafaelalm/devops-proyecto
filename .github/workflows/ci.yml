@@ -51,6 +51,8 @@ jobs:
           image-ref: devops-app:${{ github.sha }}
           format: sarif
           output: trivy-results.sarif
+          scanners: vuln
+          vuln-type: library
           severity: HIGH,CRITICAL
           exit-code: '1'
 
