@@ -28,3 +28,59 @@ docs/
 
 # Tests (si se quiere imagen de producción sin tests)
 # tests/  <- Comentado: en el curso incluimos tests en la imagen
+
+# Excluir Terraform de la imagen Docker
+**/.terraform/
+**/.terraform/**
+**/*.tfstate
+**/*.tfstate.*
+
+# Reportes y resultados de Trivy
+reporte-trivy*.json
+trivy-*.json
+analisis-trivy*.txt
+*.trivy
+.trivycache/
+
+# Archivos temporales y de análisis
+*.tar
+*.swp
+*.swo
+*.log
+
+# Archivos temporales de pruebas
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Infraestructura y despliegue
+terraform/
+helm/
+configmap.yaml
+ingress.yaml
+pod.yaml
+pvc.yaml
+replicaset.yaml
+secret.yaml
+docker-compose.yml
+terraform.tfstate
+terraform.tfstate.*
+
+# Entorno de pruebas local
+.pytest_cache/
+venv/
+.venv/
+
+# Archivos de análisis de seguridad
+reporte-trivy*.json
+reporte-trivy*.txt
+trivy-report.json
+trivy-*.json
+analisis-trivy*.json
+analisis-trivy*.txt
+imagen-trivy.tar
+
+# Archivos temporales
+*.swp
+*.swo
+*.log
