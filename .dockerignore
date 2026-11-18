@@ -66,11 +66,6 @@ docker-compose.yml
 terraform.tfstate
 terraform.tfstate.*
 
-# Entorno de pruebas local
-.pytest_cache/
-venv/
-.venv/
-
 # Archivos de análisis de seguridad
 reporte-trivy*.json
 reporte-trivy*.txt
@@ -79,8 +74,3 @@ trivy-*.json
 analisis-trivy*.json
 analisis-trivy*.txt
 imagen-trivy.tar
-
-# Archivos temporales
-*.swp
-*.swo
-*.log

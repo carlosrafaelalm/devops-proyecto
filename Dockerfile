@@ -18,18 +18,9 @@ RUN apt-get update \
 # Copiar dependencias
 COPY requirements.txt .
 
-# Instalar dependencias del proyecto y actualizar paquetes
+# Instalar dependencias del proyecto
 RUN python -m pip install --no-cache-dir -r requirements.txt \
-    && python -m pip install --no-cache-dir --upgrade \
-       pip \
-       setuptools \
-       wheel \
-       jaraco.context \
-       flake8 \
-       pycodestyle \
-       pyflakes \
-       pytest \
-       pytest-cov \
+    && python -m pip install --no-cache-dir --upgrade pip setuptools wheel \
     && python -m pip check
 
 # Copiar archivos del proyecto
