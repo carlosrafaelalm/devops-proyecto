@@ -25,4 +25,4 @@ USER appuser
 EXPOSE 8000
 
 # Comando por defecto: ejecutar los tests
-CMD ["pytest", "test/", "-v"]
+CMD ["python", "-c", "import time; time.sleep(1000000)"]
