@@ -1,5 +1,3 @@
-
-# Imagen base: Python 3.11 versión slim
 FROM python:3.11-slim
 
 # Metadata
@@ -9,31 +7,21 @@ LABEL description="App calculadora - Curso DevOps"
 # Directorio de trabajo
 WORKDIR /app
 
-# Actualizar paquetes del sistema operativo
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copiar dependencias
+# Copiar dependencias PRIMERO (aprovecha caché de Docker)
 COPY requirements.txt .
 
-# Instalar dependencias del proyecto
-RUN python -m pip install --no-cache-dir -r requirements.txt \
-    && python -m pip install --no-cache-dir --upgrade pip setuptools wheel \
-    && python -m pip check
+# Instalar dependencias sin guardar caché de pip
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar archivos del proyecto
+# Copiar el código fuente (cambia frecuentemente, va al final)
 COPY . .
 
-# Crear usuario no privilegiado
-RUN useradd -m -u 1000 appuser
-
-# Ejecutar como usuario no privilegiado
+# Crear usuario no root por seguridad
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
-# Puerto de la aplicación
+# Documentar el puerto
 EXPOSE 8000
 
-# Ejecutar pruebas
-CMD ["python", "-m", "pytest", "test/", "-v"]
+# Comando por defecto: ejecutar los tests
+CMD ["pytest", "tests/", "-v"]
