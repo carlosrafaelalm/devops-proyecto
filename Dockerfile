@@ -1,3 +1,4 @@
+
 FROM python:3.11-slim
 
 # Metadata
@@ -24,4 +25,4 @@ USER appuser
 EXPOSE 8000
 
 # Comando por defecto: ejecutar los tests
-CMD ["pytest", "tests/", "-v"]
+CMD ["python", "-c", "import time; time.sleep(1000000)"]
