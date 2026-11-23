@@ -1,28 +1,37 @@
+# Stage 1: Build - Python para tests y compilación
+FROM python:3.11-slim AS builder
 
-FROM python:3.11-slim
-
-# Metadata
 LABEL maintainer="devops-academia"
 LABEL description="App calculadora - Curso DevOps"
 
-# Directorio de trabajo
 WORKDIR /app
 
-# Copiar dependencias PRIMERO (aprovecha caché de Docker)
 COPY requirements.txt .
-
-# Instalar dependencias sin guardar caché de pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el código fuente (cambia frecuentemente, va al final)
 COPY . .
 
-# Crear usuario no root por seguridad
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
-# Documentar el puerto
-EXPOSE 8000
+# Ejecutar tests durante el build
+RUN pytest tests/ -v
 
-# Comando por defecto: ejecutar los tests
-CMD ["python", "-c", "import time; time.sleep(1000000)"]
+# Stage 2: Runtime - Nginx
+FROM nginx:1.25-alpine
+
+LABEL maintainer="devops-academia"
+LABEL description="App calculadora - Nginx runtime"
+
+# Crear usuario no root
+RUN adduser -D -u 1000 appuser
+
+# Copiar contenido de la app si necesitas servir HTML/JS
+COPY --from=builder /app /usr/share/nginx/html
+
+EXPOSE 80
+
+USER appuser
+
+CMD ["nginx", "-g", "daemon off;"]
+ 
