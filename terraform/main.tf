@@ -15,7 +15,7 @@ resource "azurerm_virtual_network" "main" {
 }
 
 resource "azurerm_storage_account" "main" {
-  name                     = lower("st${var.environment}${substr(md5(azurerm_resource_group.main.id), 0, 6)}")
+  name                     = "st${var.environment}devops${substr(md5(var.environment), 0, 5)}"
   resource_group_name      = azurerm_resource_group.main.name
   location                 = azurerm_resource_group.main.location
   account_tier             = "Standard"
@@ -26,13 +26,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   name                = "aks-${var.environment}-devops"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
-  dns_prefix          = "aks-${var.environment}-devops"
-  oidc_issuer_enabled = true
+  dns_prefix          = "aks${var.environment}devops"
 
   default_node_pool {
     name       = "default"
     node_count = var.node_count
-    vm_size    = "Standard_D2pds_v6"
+    vm_size    = var.vm_size
   }
 
   identity {
@@ -44,3 +43,4 @@ resource "azurerm_kubernetes_cluster" "aks" {
     project     = "devops-academia"
   }
 }
+ 
