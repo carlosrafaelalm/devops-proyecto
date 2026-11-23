@@ -15,7 +15,7 @@ RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
 # Ejecutar tests durante el build
-RUN pytest tests/ -v
+RUN pytest test/ -v
 
 # Stage 2: Runtime - Nginx
 FROM nginx:1.25-alpine
