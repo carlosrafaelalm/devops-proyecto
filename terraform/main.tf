@@ -15,7 +15,7 @@ resource "azurerm_virtual_network" "main" {
 }
 
 resource "azurerm_storage_account" "main" {
-  name                     = "st${var.environment}devops${substr(md5(var.environment), 0, 5)}"
+  name                     = "st${var.environment}devops${substr(md5(var.environment), 0, 10)}"
   resource_group_name      = azurerm_resource_group.main.name
   location                 = azurerm_resource_group.main.location
   account_tier             = "Standard"
