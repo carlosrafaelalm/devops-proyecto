@@ -1,18 +1,82 @@
 replicaCount: 2
 
 image:
-  repository: rafadx/devops-app
-  tag: "latest" # o el tag/sha correspondiente
-  pullPolicy: IfNotPresent
+  repository: nginx
+  tag: "1.25-alpine"
+  pullPolicy: Always
+  # Esta configuración garantiza que siempre se use nginx:1.25-alpine
+  # Cambiar solo si deseas actualizar a otra versión de nginx
+
+imagePullSecrets: []
 
 service:
   type: ClusterIP
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
   className: nginx
-  host: devops-app.local
+  annotations: {}
+  hosts:
+    - host: devops-app.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automount: true
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs: []
+  hostnames: []
+  rules: []
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+podAnnotations: {}
+
+podLabels:
+  app: devops-app
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 101
+  runAsGroup: 101
+  fsGroup: 101
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 101
+  capabilities:
+    drop:
+      - ALL
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 5
 
 resources:
   requests:
@@ -22,15 +86,25 @@ resources:
     memory: "64Mi"
     cpu: "100m"
 
-serviceAccount:
-  create: true
-  name: "devops-app-sa"
+volumeMounts:
+  - name: nginx-cache
+    mountPath: /var/cache/nginx
+  - name: nginx-run
+    mountPath: /var/run
+  - name: nginx-tmp
+    mountPath: /tmp
 
-httpRoute:
-  enabled: false
-  parentRefs:
-    - name: gateway
-      sectionName: http
+volumes:
+  - name: nginx-cache
+    emptyDir: {}
+  - name: nginx-run
+    emptyDir: {}
+  - name: nginx-tmp
+    emptyDir: {}
 
-autoscaling:
-  enabled: false  
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []
+ 

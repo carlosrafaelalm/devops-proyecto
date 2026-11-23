@@ -1,3 +1,4 @@
 environment = "staging"
-location    = "canadacentral"
+location    = "centralus"
 node_count  = 1
+ 
